@@ -19,6 +19,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Cache Android NDK
+        id: cache-android-ndk
+        uses: actions/cache@v4
+        with:
+          key: android-ndk-r${NDK_VERSION}
+          path: ~/android-ndk-r${NDK_VERSION}
+
       - name: Install Android NDK
         id: install-android-ndk
         run: |
