@@ -43,4 +43,30 @@ jobs:
         if: steps.cache-swift-toolchain.outputs.cache-hit != 'true'
         id: install-swift-toolchain
         run: |
-          env SWIFT_TAG="${{inputs.swift_tag}}" ./scripts/install-swift-toolchain.sh
+          env SWIFT_TAG="${{ inputs.swift_tag }}" ./scripts/install-swift-toolchain.sh
+
+      - uses: actions/checkout@v4
+        with:
+          repository: swiftlang/swift
+          ref: ${{ inputs.swift_tag }}
+          path: source/swift
+          show-progress: false
+
+      - uses: actions/checkout@v4
+        with:
+          repository: swiftlang/llvm-project
+          ref: ${{ inputs.swift_tag }}
+          path: source/llvm-project
+          show-progress: false
+
+      - uses: actions/checkout@v4
+        with:
+          repository: swiftlang/swift-corelibs-libdispatch
+          ref: ${{ inputs.swift_tag }}
+          path: source/swift-corelibs-libdispatch
+          show-progress: false
+
+      - name: Build Android SDK
+        id: build-android-sdk
+        run: |
+          ./scripts/build-sdk.sh
