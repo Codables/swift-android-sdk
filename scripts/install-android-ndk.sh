@@ -10,4 +10,4 @@ echo "${ndk_sha1} ${ndk_zip}" | sha1sum -c -
 unzip "${ndk_zip}"
 rm "${ndk_zip}"
 
-echo ANDROID_NDK_ROOT=${PWD}/android-ndk-r${ndk_version}
+echo ANDROID_NDK_ROOT="${PWD}/android-ndk-r${ndk_version}"
