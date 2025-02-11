@@ -7,6 +7,7 @@ on:
         description: Swift Tag
         required: true
         type: string
+        default: swift-DEVELOPMENT-SNAPSHOT-2025-02-06-a
 
 env:
   NDK_VERSION: 27c
