@@ -23,8 +23,8 @@ jobs:
         id: cache-android-ndk
         uses: actions/cache@v4
         with:
-          key: android-ndk-r${NDK_VERSION}
-          path: android-ndk-r${NDK_VERSION}
+          key: android-ndk-r${{ env.NDK_VERSION }}
+          path: android-ndk-r${{ env.NDK_VERSION }}
 
       - name: Install Android NDK
         id: install-android-ndk
