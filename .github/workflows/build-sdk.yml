@@ -21,9 +21,10 @@ jobs:
       - name: Install Android NDK
         id: install-android-ndk
         run: |
-          ./swift-android-sdk/scripts/install-android-ndk.sh
+          echo ${{ github.workspace }}
 
       - name: Install Swift Toolchain
+        if: false
         id: install-swift-toolchain
         run: |
           env SWIFT_TAG="${{inputs.swift_tag}}" ./swift-android-sdk/scripts/install-swift-toolchain.sh
