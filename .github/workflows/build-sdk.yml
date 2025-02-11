@@ -5,8 +5,9 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    container: ghcr.io/codables/swift-android-sdk:latest
     steps:
       - name: Hello
         id: hello
-        run: echo Hello there...
+        run: echo Android NDK is ${ANDROID_NDK_ROOT}
