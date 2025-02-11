@@ -43,4 +43,4 @@ jobs:
         if: steps.cache-swift-toolchain.outputs.cache-hit != 'true'
         id: install-swift-toolchain
         run: |
-          env SWIFT_TAG="${{inputs.swift_tag}}" ./swift-android-sdk/scripts/install-swift-toolchain.sh
+          env SWIFT_TAG="${{inputs.swift_tag}}" ./scripts/install-swift-toolchain.sh
