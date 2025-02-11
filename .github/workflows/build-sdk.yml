@@ -28,11 +28,19 @@ jobs:
 
       - name: Install Android NDK
         id: install-android-ndk
+        if: steps.cache-android-ndk.outputs.cache-hit != 'true'
         run: |
           ./scripts/install-android-ndk.sh
 
+      - name: Cache Swift Toolchain
+        id: cache-swift-toolchain
+        uses: actions/cache@v4
+        with:
+          key: swift-toolchain-${{ inputs.swift_tag }}
+          path: swift-toolchain
+
       - name: Install Swift Toolchain
-        if: false
+        if: steps.cache-swift-toolchain.outputs.cache-hit != 'true'
         id: install-swift-toolchain
         run: |
           env SWIFT_TAG="${{inputs.swift_tag}}" ./swift-android-sdk/scripts/install-swift-toolchain.sh
