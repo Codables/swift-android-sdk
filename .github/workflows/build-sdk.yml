@@ -4,20 +4,26 @@ on:
   workflow_dispatch:
     inputs:
       swift_tag:
-        description: 'Swift Tag'
+        description: Swift Tag
         required: true
         type: string
+
+env:
+  NDK_VERSION: 27c
+  NDK_SHA1: 090e8083a715fdb1a3e402d0763c388abb03fb4e
 
 jobs:
   build-sdk:
     runs-on: ubuntu-24.04
-    container: ghcr.io/codables/swift-android-sdk:latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          path: sdk-build
+
+      - name: Install Android NDK
+        id: install-android-ndk
+        run: |
+          ./swift-android-sdk/scripts/install-android-ndk.sh
 
       - name: Install Swift Toolchain
         id: install-swift-toolchain
         run: |
-          env SWIFT_TAG="${{inputs.swift_tag}}" ./sdk-build/install-swift-toolchain.sh
+          env SWIFT_TAG="${{inputs.swift_tag}}" ./swift-android-sdk/scripts/install-swift-toolchain.sh
