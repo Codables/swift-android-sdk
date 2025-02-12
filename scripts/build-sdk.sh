@@ -1,6 +1,7 @@
 #!/bin/bash
 set -eux
 
+SWIFT_TOOLCHAIN="${PWD}/swift-toolchain"
 export SDK_ROOT="${PWD}/sdk-build"
 mkdir -p "${SDK_ROOT}"
 
