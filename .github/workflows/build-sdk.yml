@@ -75,3 +75,9 @@ jobs:
         id: build-android-sdk
         run: |
           ./scripts/build-sdk.sh
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Store SDK Artifact
+          path: sdk-build
+
