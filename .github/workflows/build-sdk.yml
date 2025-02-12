@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Install Dependencies
+        id: install-deps
+        run: |
+          sudo apt install ninja-build
+
       - name: Cache Android NDK
         id: cache-android-ndk
         uses: actions/cache@v4
