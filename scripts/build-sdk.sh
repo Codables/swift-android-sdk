@@ -24,5 +24,5 @@ mkdir -p "${SDK_ROOT}"
     --skip-early-swift-driver \
     --install-swift \
     --install-libdispatch \
-    --install-destdir="${SDK_ROOT}" \
+    --install-destdir="${SDK_ROOT}/aarch64-unknown-linux-android29" \
     '--swift-install-components=compiler;license;stdlib;sdk-overlay'
