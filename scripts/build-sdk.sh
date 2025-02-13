@@ -1,9 +1,13 @@
 #!/bin/bash
 set -eux
 
-SWIFT_TOOLCHAIN="${PWD}/swift-toolchain"
-export SDK_ROOT="${PWD}/sdk-build"
+arch=${1:?"architecture must be set"}
+triple=${arch}-unknown-linux-android29
+
+SDK_ROOT="${PWD}/sdk-build/swift-android.artifactbundle/Android29.sdk/${triple}"
 mkdir -p "${SDK_ROOT}"
+
+SWIFT_TOOLCHAIN="${PWD}/swift-toolchain"
 
 ./source/swift/utils/build-script \
     -RA \
@@ -16,14 +20,14 @@ mkdir -p "${SDK_ROOT}"
     --build-swift-static-stdlib \
     --android \
     --android-ndk "${ANDROID_NDK_ROOT}" \
-    --android-arch aarch64 \
+    --android-arch "${arch}" \
     --android-api-level 29 \
     --cross-compile-append-host-target-to-destdir=False \
-    --cross-compile-hosts=android-aarch64 \
+    --cross-compile-hosts=android-"${arch}" \
     --native-swift-tools-path="${SWIFT_TOOLCHAIN}/usr/bin" \
     --native-clang-tools-path="${SWIFT_TOOLCHAIN}/usr/bin" \
     --skip-early-swift-driver \
     --install-swift \
     --install-libdispatch \
-    --install-destdir="${SDK_ROOT}/aarch64-unknown-linux-android29" \
+    --install-destdir="${SDK_ROOT}" \
     '--swift-install-components=compiler;license;stdlib;sdk-overlay'

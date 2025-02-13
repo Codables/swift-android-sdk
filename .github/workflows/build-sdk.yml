@@ -12,6 +12,7 @@ on:
 env:
   NDK_VERSION: 27c
   NDK_SHA1: 090e8083a715fdb1a3e402d0763c388abb03fb4e
+  NDK_API_LEVEL: 29
 
 jobs:
   build-sdk:
@@ -74,10 +75,12 @@ jobs:
       - name: Build Android SDK
         id: build-android-sdk
         run: |
-          ./scripts/build-sdk.sh
+          ./scripts/build-sdk.sh aarch64
+          ./scripts/assemble-sdk.sh
 
       - uses: actions/upload-artifact@v4
+        name: Store SDK Artifact
         with:
-          name: Store SDK Artifact
+          name: swift-android-sdk
           path: sdk-build
 
