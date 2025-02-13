@@ -80,7 +80,7 @@ jobs:
           BUNDLE_DIR=$(dirname ${SDK_ROOT})
           BUNDLE_NAME=$(basename ${BUNDLE_DIR}).tar.gz
           tar czf ${BUNDLE_NAME} "${BUNDLE_DIR}"
-          echo "archive=${BUNDLE_NAME}" >> $GITHUB_ENV
+          echo "archive=${BUNDLE_NAME}" >> $GITHUB_OUTPUT
 
       - uses: actions/upload-artifact@v4
         name: Store SDK Artifact
