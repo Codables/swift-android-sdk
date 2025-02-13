@@ -85,6 +85,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         name: Store SDK Artifact
         with:
-          name: ${{ steps.build-android-sdk.outputs.archive }}
-          path: sdk-build
+          path: ${{ steps.build-android-sdk.outputs.archive }}
 
