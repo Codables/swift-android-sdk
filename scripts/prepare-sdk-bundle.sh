@@ -1,8 +1,11 @@
 #!/bin/bash
 set -eux
 
-BUNDLE_ROOT="${PWD}/sdk-build/swift-android.artifactbundle/"
+SWIFT_TAG=${1:?"swift tag must be set"}
+BUNDLE_ROOT="${PWD}/sdk-build/${SWIFT_TAG}-android29.artifactbundle"
 SDK_ROOT="${BUNDLE_ROOT}/Android29.sdk"
+
+mkdir -p "${SDK_ROOT}"
 
 cat > "${BUNDLE_ROOT}/info.json" <<EOF
 {
@@ -53,3 +56,5 @@ cat > "${SDK_ROOT}/toolset.json" <<EOF
     }
 }
 EOF
+
+echo "${SDK_ROOT}"

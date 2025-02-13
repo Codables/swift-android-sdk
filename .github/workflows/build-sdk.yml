@@ -75,8 +75,8 @@ jobs:
       - name: Build Android SDK
         id: build-android-sdk
         run: |
-          ./scripts/build-sdk.sh aarch64
-          ./scripts/assemble-sdk.sh
+          SDK_ROOT=$(./scripts/prepare-sdk-bundle.sh ${{ inputs.swift_tag }})
+          ./scripts/build-sdk.sh aarch64 "${SDK_ROOT}"
 
       - uses: actions/upload-artifact@v4
         name: Store SDK Artifact

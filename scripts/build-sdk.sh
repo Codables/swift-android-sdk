@@ -2,10 +2,9 @@
 set -eux
 
 arch=${1:?"architecture must be set"}
+sdk_root=${2:?"sdk root destination dir must be set"}
 triple=${arch}-unknown-linux-android29
-
-SDK_ROOT="${PWD}/sdk-build/swift-android.artifactbundle/Android29.sdk/${triple}"
-mkdir -p "${SDK_ROOT}"
+dest="${sdk_root}/${triple}"
 
 SWIFT_TOOLCHAIN="${PWD}/swift-toolchain"
 
@@ -29,5 +28,5 @@ SWIFT_TOOLCHAIN="${PWD}/swift-toolchain"
     --skip-early-swift-driver \
     --install-swift \
     --install-libdispatch \
-    --install-destdir="${SDK_ROOT}" \
+    --install-destdir="${dest}" \
     '--swift-install-components=compiler;license;stdlib;sdk-overlay'
