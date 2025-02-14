@@ -78,13 +78,15 @@ jobs:
           SDK_ROOT=$(./scripts/prepare-sdk-bundle.sh ${{ inputs.swift_tag }})
           ./scripts/build-sdk.sh aarch64 "${SDK_ROOT}"
           BUNDLE_DIR=$(dirname ${SDK_ROOT})
-          BUNDLE_NAME=$(basename ${BUNDLE_DIR}).tar.gz
-          tar czf ${BUNDLE_NAME} "${BUNDLE_DIR}"
-          echo "archive=${BUNDLE_NAME}" >> $GITHUB_OUTPUT
+          BUNDLE_BASE_DIR=$(dirname ${BUNDLE_DIR})
+          BUNDLE_NAME=$(basename ${BUNDLE_DIR})
+          tar czf "${BUNDLE_NAME}.tar.gz" -C ${BUNDLE_BASE_DIR} ${BUNDLE_NAME}
+          echo "archive=${BUNDLE_NAME}.tar.gz" >> $GITHUB_OUTPUT
 
       - uses: actions/upload-artifact@v4
         name: Store SDK Artifact
         with:
+          name: ${{ steps.build-android-sdk.outputs.archive }}
           path: ${{ steps.build-android-sdk.outputs.archive }}
           compression-level: 0
 
