@@ -86,4 +86,5 @@ jobs:
         name: Store SDK Artifact
         with:
           path: ${{ steps.build-android-sdk.outputs.archive }}
+          compression-level: 0
 
