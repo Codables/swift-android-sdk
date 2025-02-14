@@ -1,12 +1,92 @@
 name: Development Snapshot
 
 on:
-  workflow_dispatch
+  workflow_dispatch:
+    inputs:
+      swift_tag:
+        description: Swift Tag
+        required: true
+        type: string
+        default: swift-DEVELOPMENT-SNAPSHOT-2025-02-06-a
+
+env:
+  NDK_VERSION: 27c
+  NDK_SHA1: 090e8083a715fdb1a3e402d0763c388abb03fb4e
+  NDK_API_LEVEL: 29
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-sdk:
+    runs-on: ubuntu-24.04
     steps:
-      - name: Hello
-        id: hello
-        run: echo Hello there...
+      - uses: actions/checkout@v4
+
+      - name: Install Dependencies
+        id: install-deps
+        run: |
+          sudo apt install ninja-build
+
+      - name: Cache Android NDK
+        id: cache-android-ndk
+        uses: actions/cache@v4
+        with:
+          key: android-ndk-r${{ env.NDK_VERSION }}
+          path: android-ndk-r${{ env.NDK_VERSION }}
+
+      - name: Install Android NDK
+        id: install-android-ndk
+        if: steps.cache-android-ndk.outputs.cache-hit != 'true'
+        run: |
+          ./scripts/install-android-ndk.sh
+
+      - name: Cache Swift Toolchain
+        id: cache-swift-toolchain
+        uses: actions/cache@v4
+        with:
+          key: swift-toolchain-${{ inputs.swift_tag }}
+          path: swift-toolchain
+
+      - name: Install Swift Toolchain
+        if: steps.cache-swift-toolchain.outputs.cache-hit != 'true'
+        id: install-swift-toolchain
+        run: |
+          env SWIFT_TAG="${{ inputs.swift_tag }}" ./scripts/install-swift-toolchain.sh
+
+      - uses: actions/checkout@v4
+        with:
+          repository: swiftlang/swift
+          ref: ${{ inputs.swift_tag }}
+          path: source/swift
+          show-progress: false
+
+      - uses: actions/checkout@v4
+        with:
+          repository: swiftlang/llvm-project
+          ref: ${{ inputs.swift_tag }}
+          path: source/llvm-project
+          show-progress: false
+
+      - uses: actions/checkout@v4
+        with:
+          repository: swiftlang/swift-corelibs-libdispatch
+          ref: ${{ inputs.swift_tag }}
+          path: source/swift-corelibs-libdispatch
+          show-progress: false
+
+      - name: Build Android SDK
+        id: build-android-sdk
+        run: |
+          SDK_ROOT=$(./scripts/prepare-sdk-bundle.sh ${{ inputs.swift_tag }})
+          ./scripts/build-sdk.sh aarch64 "${SDK_ROOT}"
+          BUNDLE_DIR=$(dirname ${SDK_ROOT})
+          BUNDLE_BASE_DIR=$(dirname ${BUNDLE_DIR})
+          BUNDLE_NAME=$(basename ${BUNDLE_DIR})
+          tar czf "${BUNDLE_NAME}.tar.gz" -C ${BUNDLE_BASE_DIR} ${BUNDLE_NAME}
+          echo "archive=${BUNDLE_NAME}.tar.gz" >> $GITHUB_OUTPUT
+
+      - uses: actions/upload-artifact@v4
+        name: Store SDK Artifact
+        with:
+          name: ${{ steps.build-android-sdk.outputs.archive }}
+          path: ${{ steps.build-android-sdk.outputs.archive }}
+          compression-level: 0
+
